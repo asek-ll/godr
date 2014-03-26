@@ -8,5 +8,10 @@
   },
   "repository": "",
   "author": "",
-  "license": "BSD"
+  "license": "BSD",
+  "dependencies": {
+    "googleapis": "~0.6.1",
+    "underscore": "~1.6.0",
+    "async": "~0.2.10"
+  }
 }
