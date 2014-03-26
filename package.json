@@ -12,6 +12,10 @@
   "dependencies": {
     "googleapis": "~0.6.1",
     "underscore": "~1.6.0",
-    "async": "~0.2.10"
+    "async": "~0.2.10",
+    "nconf": "~0.6.9",
+    "optimist": "~0.6.1",
+    "open": "0.0.4",
+    "mime": "~1.2.11"
   }
 }
