@@ -1,5 +1,5 @@
 var googleapis = require('googleapis'),
-          gogi = require('./lib/index.js'),
+          Gogi = require('./lib/index.js'),
          nconf = require('nconf'),
           path = require('path'),
          Index = require('./lib/findex.js'),
@@ -9,10 +9,15 @@ var googleapis = require('googleapis'),
       open = require('open'),
       async = require('async');
 
+var gogi = {};
 nconf.file(path.join(process.cwd(),'.gogi/config.json'));
-gogi.clientSettings(nconf.get('client'));
-gogi.loadConfig(nconf.get('credential'));
 
+var getGGclient = function () {
+  var gogi = new Gogi();
+  gogi.clientSettings(nconf.get('client'));
+  gogi.loadConfig(nconf.get('credential'));
+  return gogi;
+};
 
 var argv = optimist.argv;
 
@@ -23,6 +28,8 @@ if(argv._.length > 0){
       input: process.stdin,
       output: process.stdout
     });
+
+    gogi = getGGclient();
 
     var url = gogi.auth.generateAuthUrl({
       access_type: 'offline', // will return a refresh token
@@ -57,6 +64,8 @@ if(argv._.length > 0){
         return nconf.save();
       }
     };
+
+    gogi = getGGclient();
 
     var createFolder = function () {
       return gogi.createFolder(remote.name, function (err, file) {
@@ -96,7 +105,8 @@ if(argv._.length > 0){
         return async.eachSeries(files, function (file, next) {
 
           if(file.files){
-            return gogi.uploadFile({title: file.name, mimeType: 'application/vnd.google-apps.folder', parents:[parentId]}, null, function (err, body) {
+            gogi = getGGclient();
+            return gogi.uploadFile({title: file.name, mimeType: 'application/vnd.google-apps.folder', parents:[{id:parentId}]}, null, function (err, body) {
 
               console.log(err, body);
 
@@ -104,19 +114,18 @@ if(argv._.length > 0){
                 return filesBypass(file.files, body.id, next);
               }
 
-              setTimeout(next,1000);
-              //return next();
+              return next();
             });
           }
 
 
+          gogi = getGGclient();
           //return gogi.uploadFile({title: file.name, mimeType: file.mime}, 'dummy', function (err, body) {
-          return gogi.uploadFile({title: file.name, mimeType: file.mime, parents:[parentId]}, 'dummy', function (err, body) {
+          return gogi.uploadFile({title: file.name, mimeType: file.mime, parents:[{id:parentId}]}, 'dummy', function (err, body) {
 
-          console.log(err, body);
+            console.log(err, body);
             //body
-            //return next();
-              setTimeout(next,1000);
+            return next();
           });
 
 
