@@ -153,7 +153,8 @@ if(argv._.length > 0){
 
   if(argv._[0] === 'upload_test'){
 
-    gogi.uploadFile({title:'CustomTitle',mimeType:'text/plain'}, 'hello world', function (err, body) {
+
+    gogi.uploadFile2({title:'CustomTitle',mimeType:'text/plain'}, 'index.js', function (err, body) {
       console.log(err, body);
     });
 
