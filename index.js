@@ -20,6 +20,10 @@ gogi.on('credentials_change', function (credentials) {
   return nconf.save();
 });
 
+googleapis.discover('drive', 'v2').execute(function (err, client) {
+  console.log(client.drive.files.insert(), err);
+});
+
 var argv = optimist.argv;
 
 if(argv._.length > 0){
@@ -144,12 +148,21 @@ if(argv._.length > 0){
 
     });
   }
+
+
   if(argv._[0] === 'add'){
 
     var index = new Index(process.cwd());
     index.add('.', console.log);
 
   }
+
+  if(argv._[0] === 'refresh'){
+    gogi.refreshToken(function (err) {
+      console.log(err);
+    });
+  }
+
 
   if(argv._[0] === 'upload_test'){
 
