@@ -1,0 +1,10 @@
+{
+    "name": "local_config",
+    "version": "0.0.1",
+    "main": "index.js",
+    "private": true,
+
+    "plugin": {
+        "provides": ["local_config"]
+    }
+}

@@ -16,7 +16,9 @@
     "nconf": "~0.6.9",
     "optimist": "~0.6.1",
     "open": "0.0.4",
-    "mime": "~1.2.11"
+    "mime": "~1.2.11",
+    "winston": "~0.7.3",
+    "architect": "~0.1.11"
   },
   "devDependencies": {
     "should": "~3.3.1",

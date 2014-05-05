@@ -11,18 +11,22 @@ var googleapis = require('googleapis'),
 
 nconf.file(path.join(process.cwd(),'.gogi/config.json'));
 
-var clientData = nconf.get('client');
+var settings = require('./settings.json');
+var clientData = settings.client;
+
 var gogi = new Gogi(clientData.id, clientData.secret, clientData.redirect_url);
-gogi.setCredentials(nconf.get('credential'));
+if(nconf.get('credential')){
+  gogi.setCredentials(nconf.get('credential'));
+}
 
 gogi.on('credentials_change', function (credentials) {
   nconf.set('credential', credentials);
   return nconf.save();
 });
 
-googleapis.discover('drive', 'v2').execute(function (err, client) {
-  console.log(client.drive.files.insert(), err);
-});
+//googleapis.discover('drive', 'v2').execute(function (err, client) {
+  //console.log(client.drive.files.insert(), err);
+//});
 
 var argv = optimist.argv;
 
@@ -36,7 +40,7 @@ if(argv._.length > 0){
 
     var url = gogi.auth.generateAuthUrl({
       access_type: 'offline', // will return a refresh token
-      scope: nconf.get('client:scope')
+      scope: clientData.scope
     });
 
     console.log('Visit the url: ', url);
@@ -101,9 +105,10 @@ if(argv._.length > 0){
         return;
       }
 
-      var filesBypass = function (files, parentId, next) {
+      var filesBypass = function (files, parentId, parentName, next) {
 
         return async.eachSeries(files, function (file, next) {
+          var fullFileName = path.join(parentName, file.name);
 
           if(file.files){
             return gogi.uploadFile({title: file.name, mimeType: 'application/vnd.google-apps.folder', parents:[{id:parentId}]}, null, function (err, body) {
@@ -116,7 +121,7 @@ if(argv._.length > 0){
               //console.log(err, body);
 
               if(body){
-                return filesBypass(file.files, body.id, next);
+                return filesBypass(file.files, body.id, fullFileName, next);
               }
 
               return next();
@@ -124,7 +129,7 @@ if(argv._.length > 0){
           }
 
           //return gogi.uploadFile({title: file.name, mimeType: file.mime}, 'dummy', function (err, body) {
-          return gogi.uploadFile({title: file.name, mimeType: file.mime, parents:[{id:parentId}]}, 'dummy', function (err, body) {
+          return gogi.uploadFile2({title: file.name, mimeType: file.mime, parents:[{id:parentId}]}, fullFileName, function (err, body) {
 
             //console.log(err, body);
               if(!err){
@@ -142,7 +147,7 @@ if(argv._.length > 0){
 
       };
 
-      filesBypass(files, nconf.get('remote:id'), function (err) {
+      filesBypass(files, nconf.get('remote:id'),'', function (err) {
         console.log("done");
       });
 
@@ -159,18 +164,23 @@ if(argv._.length > 0){
 
   if(argv._[0] === 'refresh'){
     gogi.refreshToken(function (err) {
-      console.log(err);
+      //console.log(err);
     });
   }
 
 
   if(argv._[0] === 'upload_test'){
 
-
-    gogi.uploadFile2({title:'CustomTitle',mimeType:'text/plain'}, 'index.js', function (err, body) {
-      console.log(err, body);
+    gogi.uploadFile2({title:'pix3.txt',mimeType:'text/plain'}, 'test2.txt', function (err, body) {
+    //gogi.uploadFile2({title:'test.txt',mimeType:'text/plain'}, 'index.js', function (err, body) {
+      console.log(err?err.code:null, body);
     });
 
+  }
+
+  if(argv._[0] === 'test'){
+    var remoteDir = argv._[1];
+    console.log('work fine', remoteDir);
   }
 }
 
