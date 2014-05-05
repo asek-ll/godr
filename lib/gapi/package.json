@@ -1,0 +1,11 @@
+{
+    "name": "gapi",
+    "version": "0.0.1",
+    "main": "gapi.js",
+    "private": true,
+
+    "plugin": {
+        "provides": ["gapi"],
+        "consumes": []
+    }
+}

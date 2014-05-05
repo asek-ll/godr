@@ -1,0 +1,11 @@
+{
+    "name": "commands",
+    "version": "0.0.1",
+    "main": "commands.js",
+    "private": true,
+
+    "plugin": {
+        "provides": ["commands"],
+        "consumes": ["logger","fsync"]
+    }
+}

@@ -1,0 +1,11 @@
+{
+    "name": "fsync",
+    "version": "0.0.1",
+    "main": "fsync.js",
+    "private": true,
+
+    "plugin": {
+        "provides": ["fsync"],
+        "consumes": ["local_config","gapi"]
+    }
+}

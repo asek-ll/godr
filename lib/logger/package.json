@@ -1,0 +1,11 @@
+{
+    "name": "logger",
+    "version": "0.0.1",
+    "main": "logger.js",
+    "private": true,
+
+    "plugin": {
+        "provides": ["logger"],
+        "consumes": []
+    }
+}
