@@ -19,7 +19,9 @@
     "mime": "~1.2.11",
     "winston": "~0.7.3",
     "architect": "~0.1.11",
-    "intel": "~0.5.2"
+    "intel": "~0.5.2",
+    "lodash": "~2.4.1",
+    "request": "~2.34.0"
   },
   "devDependencies": {
     "should": "~3.3.1",
