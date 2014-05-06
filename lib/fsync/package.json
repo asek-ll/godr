@@ -6,6 +6,6 @@
 
     "plugin": {
         "provides": ["fsync"],
-        "consumes": ["local_config","gapi"]
+        "consumes": ["local_config","gapi","logger"]
     }
 }
