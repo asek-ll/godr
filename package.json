@@ -21,7 +21,8 @@
     "architect": "~0.1.11",
     "intel": "~0.5.2",
     "lodash": "~2.4.1",
-    "request": "~2.34.0"
+    "request": "~2.34.0",
+    "nedb": "~0.10.5"
   },
   "devDependencies": {
     "should": "~3.3.1",
